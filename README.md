@@ -18,6 +18,10 @@ I'll gladly accept any fixes and improvements. It would be the best to
 put `#ifdefs` around them, so the new code could be turned on or off,
 according user's wish without the need to maintain separate branches.
 
+The name is a pun. `/tmp` is (or was) a temporary directory on Unix systems.
+The device I built did not last long. The English word `tiny` and Polish
+word `tani` (meaning `cheap`) sound similar.
+
 License
 -------
 
