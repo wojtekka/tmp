@@ -1,6 +1,6 @@
 
   /tmp - tiny/tani mp3 player
-  (C) Copyright 2003-2004 Wojtek Kaniewski <wojtekka@irc.pl>
+  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
 
   Za³o¿enia:
   - prosty i tani odtwarzacz mp3,
@@ -13,11 +13,8 @@
   pliki. Je¶li to mo¿liwe, proszê o podes³anie tak przygotowanego projektu,
   ¿ebym móg³ go dodaæ do archiwum.
 
-  Do debugowania u¿ywam interfejsu SPI, którym uk³ad jest programowany.
-  Protokó³ jest w miarê prosty. Kiedy AVR chce wys³aæ jaki¶ bajt, ustawia
-  MISO na wysoki i po kolejnych taktach SCK z hosta wysy³a kolejne bity.
-  Program dla Linuksa, który odczytuje dane jest za³±czony w katalogi
-  spiread.
+  Do debugowania u¿ywam programowego portu RS232. Dane s± nadawane na wyj¶ciu
+  MISO z prêdko¶ci± 9600bps. Nale¿y u¿yæ zewnêtrznego konwertera poziomów.
 
   Z chêci± przyjmê wszystkie poprawki i usprawnienia. Najlepiej gdyby by³y
   w postaci kodu z #ifdef, który w³±czy poprawki dopiero po umieszczeniu

@@ -4,7 +4,7 @@ OBJS = debug.o spi.o mmc.o player.o vs1001k.o
 PROG = stk200
 SUDO = 
 
-CFLAGS = -Wall -Os -mmcu=$(MCU) -Wstrict-prototypes
+CFLAGS = -Wall -Os -mmcu=$(MCU) -Wstrict-prototypes -DDEBUG
 
 default:	$(NAME).bin $(NAME).hex $(NAME).hex $(NAME).lst $(NAME)-remove
 

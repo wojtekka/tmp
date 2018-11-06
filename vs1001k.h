@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
- *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -30,9 +30,9 @@
 #define vs_cs_set() sbi(PORTB, 3)
 #define vs_cs_clear() cbi(PORTB, 3)
 #define vs_dreq_get() bit_is_set(PINB, 2)
-#define vs_dreq_wait() loop_until_bit_is_set(PINB, 2)
 #define vs_dclk_set() sbi(PORTB, 0)
 #define vs_dclk_clear() cbi(PORTB, 0)
+//#define vs_dreq_wait() loop_until_bit_is_set(PINB, 2)
 
 #define VS_MODE 0
 #define		VS_SM_DIFF _BV(0)
@@ -61,7 +61,7 @@
 #define VS_HIGH(x) (((x) >> 8) & 255)
 #define VS_LOW(x) ((x) & 255)
 
-#define VS_XTAL 12000000
+#define VS_XTAL 12288000
 #define VS_CLOCKF_VALUE (0x8000 | (VS_XTAL / 2000))
 
 extern uint8_t vs_volume;
@@ -74,5 +74,6 @@ extern void vs_volume_set(uint8_t volume);
 #define vs_volume_mute() vs_volume_set(254)
 extern void vs_reset(void);
 extern void vs_init(void);
+extern void vs_dreq_wait(void);
 
 #endif /* __VS1001K_H */

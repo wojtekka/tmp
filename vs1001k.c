@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
- *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -17,6 +17,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <avr/delay.h>
 #include <avr/io.h>
 #include "mmc.h"
 #include "spi.h"
@@ -24,6 +25,23 @@
 #include "player.h"
 
 uint8_t vs_volume = 64;
+
+/*
+ * vs_dreq_wait()
+ *
+ * waits until the VS1001K will be ready for another 32 bytes of data.
+ * when the loop times out, it reports an error.
+ */
+void vs_dreq_wait(void)
+{
+	uint16_t timeout = 65535;
+
+	while (timeout && bit_is_clear(PINB, 2))
+		timeout--;
+
+	if (!timeout)
+		player_error(4);
+}
 
 /*
  * vs_data_write()
@@ -149,7 +167,7 @@ void vs_reset(void)
 
 	vs_command_write(VS_MODE, VS_SM_RESET);
 
-	for (i = 16; i; i--);		/* 7.4. Wait at least 2us */
+	_delay_loop_1(4);		/* 7.4. Wait at least 2us */
 
 	vs_dreq_wait();
 

@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
- *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -21,6 +21,7 @@
 #include <avr/io.h>
 #include <avr/signal.h>
 #include <avr/sleep.h>
+#include <avr/delay.h>
 #include "debug.h"
 #include "mmc.h"
 #include "player.h"
@@ -61,6 +62,24 @@ void player_sleep(void)
 }
 
 /*
+ * player_delay_10ms()
+ *
+ * simple delay used for debouncing. doesn't have to be accurate.
+ */
+void player_delay_10ms(void)
+{
+	_delay_loop_2(15000);
+}
+
+void player_delay_500ms(void)
+{
+	uint8_t i;
+
+	for (i = 50; i; i--)
+		player_delay_10ms();
+}
+
+/*
  * player_error()
  *
  * indicates that something's wrong. at the moment it sends debug messages
@@ -73,22 +92,23 @@ void player_error(uint8_t val)
 	debug_send('!');
 	debug_send(val + 48);
 
+	val++;
+
+	player_led_clear();
+	player_delay_500ms();
+	player_delay_500ms();
+
+	while (val--) {
+		player_delay_500ms();
+		player_led_set();
+		player_delay_500ms();
+		player_led_clear();
+	}
+
+//	for (;;);
+
 	/* software reset */
 	__asm__ __volatile__ ("rjmp __vectors" ::);
-}
-
-/*
- * player_delay_10ms()
- *
- * simple delay used for debouncing. doesn't have to be accurate.
- */
-void player_delay_10ms(void)
-{
-	uint8_t i, j;
-
-	for (i = 255; i; i--)
-		for (j = 255; j; j--)
-			nop();
 }
 
 /*
@@ -130,7 +150,8 @@ uint16_t fat_next(uint16_t cluster)
 			return b1 | ((b2 & 0x0f) << 8);
 		}
 	} else {
-		block = cluster << 1;
+		block = cluster;
+		block <<= 1;
 		index = block & 31;
 		block += fat;
 		byte(block, 0) &= 0xe0;		/* block &= 0xffffffe0; */
@@ -148,8 +169,11 @@ uint16_t fat_next(uint16_t cluster)
  */
 void play(uint16_t cluster, int32_t size)
 {
-	uint8_t i, j, finished = 0, vol_pressed = 0;
+	uint8_t i, j, finished = 0;
+	uint8_t vol_pressed = 0;
 
+	player_led_set();
+ 
 	vs_reset();
 
 #if 0
@@ -157,7 +181,7 @@ void play(uint16_t cluster, int32_t size)
 	debug_send_hex(cluster & 255);
 	debug_send(' ');
 #endif
-	
+
 	finished = 0;
 
 	for (;;) {
@@ -181,30 +205,22 @@ void play(uint16_t cluster, int32_t size)
 			if (player_volp_pressed()) {
 				if (!vol_pressed) {
 					vol_pressed = 1;
-					if (vs_volume > 4)
-						vs_volume -= 4;
-#ifndef VOLUME_UP_DOWN
+					if (vs_volume > 8)
+						vs_volume -= 8;
 					else
-						vs_volume = 108;
-#endif
-					vs_volume_set(vs_volume);
-				}
-			} else {
-				vol_pressed = 0;
-			}
+						vs_volume = 4;
 
-#ifdef VOLUME_UP_DOWN
-			if (player_volm_pressed()) {
-				if (!vol_pressed) {
-					vol_pressed = 1;
-					if (vs_volume < 108)
-						vs_volume += 4;
 					vs_volume_set(vs_volume);
+				} else {
+					if (vol_pressed > 16) {
+						vs_volume = 108;
+						vs_volume_set(vs_volume);
+					} else
+						vol_pressed++;
 				}
 			} else {
 				vol_pressed = 0;
 			}
-#endif
 
 			mmc_read_block_start();
 
@@ -263,12 +279,12 @@ int main(void)
 	uint32_t directory;	/* root directory offset */
 
 //	      7       0
-//	PORTB x010 1010	0x2a
+//	PORTB x110 1010	0x6a
 //	DDRB  0101 1011	0x5b
 //	      smvb cdrd
-//            coos srsc
+//            cios srsc
 //            lsly ~etl
-//	      ki-n  q~k
+//	      ko-n  q~k
 //	         
 //	PORTD  011 0101	0x35
 //	DDRD   110 1010	0x6a
@@ -278,10 +294,14 @@ int main(void)
 //	        s   yk+
 
 	/* setup ports */
-	PORTB = 0x2a;
+	PORTB = 0x6a;
 	DDRB = 0x5b;
 	PORTD = 0x35;
 	DDRD = 0x6a;
+
+	debug_send(13);
+	debug_send(10);
+	debug_send('>');
 	
 	/* setup Play/Next button interrupt */
 	enable_external_int(_BV(INT0));
@@ -293,6 +313,10 @@ sleep:
 	/* initialize peripherials */
 	mmc_init();
 	vs_init();
+
+	/* initial volume */
+	vs_volume = 0x28;
+	vs_volume_set(vs_volume);
 
 	/* turn on status LED */
 	player_led_set();

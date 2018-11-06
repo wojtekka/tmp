@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
- *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -24,7 +24,7 @@
 
 #define byte(ptr,ofs) *(((uint8_t*)&(ptr))+(ofs))
 
-/* idea from yampp. gcc optimizes union better than logical ands and shifts. */
+/* idea from yampp. gcc optimizes unions better than logical ands and shifts. */
 
 union dword {
 	uint32_t dword;
@@ -37,7 +37,7 @@ union word {
 	uint8_t byte[2];
 };
 
-/* first two bytes aren't even read, because we start at 32-byte boundary */
+/* first two bytes are never read, because we start at 32-byte boundary */
 
 struct partition {
 /*	uint8_t state;		   0x1be */

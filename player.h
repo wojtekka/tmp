@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
- *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -23,16 +23,10 @@
 #include <avr/io.h>
 #include <inttypes.h>
 
-/* define if you want to have two volume buttons: plus and minus. otherwise
- * there is a single button that cycles through several volume levels. */
-#define VOLUME_UP_DOWN
-
 #define player_play_pressed() bit_is_clear(PIND, 2)
 #define player_play_pressed_wait() loop_until_bit_is_set(PIND, 2)
 
 #define player_volp_pressed() bit_is_clear(PIND, 0)
-
-#define player_volm_pressed() bit_is_clear(PINB, 5)
 
 #define player_led_set() sbi(PORTD, 6)
 #define player_led_clear() cbi(PORTD, 6)
