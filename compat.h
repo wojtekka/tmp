@@ -1,7 +1,7 @@
-/* $Id: player.h 11 2005-06-15 16:29:51Z wojtekka $ */
+/* $Id$ */
 
 /*
- *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2006 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -17,23 +17,15 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __PLAYER_H
-#define __PLAYER_H
+#ifndef __COMPAT_H
+#define __COMPATI_H
 
-#include <avr/io.h>
-#include <inttypes.h>
+#ifndef sbi
+#define sbi(a,b) do { a |= _BV(b); } while(0)
+#endif
 
-#define player_play_pressed() bit_is_clear(PIND, 2)
-#define player_play_pressed_wait() loop_until_bit_is_set(PIND, 2)
+#ifndef cbi
+#define cbi(a,b) do { a &= ~_BV(b); } while(0)
+#endif
 
-#define player_volp_pressed() bit_is_clear(PIND, 0)
-
-#define player_led_set() sbi(PORTD, 6)
-#define player_led_clear() cbi(PORTD, 6)
-
-#define nop() __asm__ __volatile__ ("nop\n\t")
-
-extern void player_error(uint8_t val);
-extern void player_delay_10ms(void);
-
-#endif /* __PLAYER_H */
+#endif /* __COMPAT_H */

@@ -1,7 +1,7 @@
-/* $Id$ */
+/* $Id: player.c 11 2005-06-15 16:29:51Z wojtekka $ */
 
 /*
- *  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -19,9 +19,8 @@
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
-#include <avr/signal.h>
 #include <avr/sleep.h>
-#include <avr/delay.h>
+#include <util/delay.h>
 #include "debug.h"
 #include "mmc.h"
 #include "player.h"
@@ -304,7 +303,7 @@ int main(void)
 	debug_send('>');
 	
 	/* setup Play/Next button interrupt */
-	enable_external_int(_BV(INT0));
+	GIMSK = _BV(INT0);
 
 sleep:
 	/* power down until Play/Next pressed */

@@ -1,7 +1,7 @@
-/* $Id$ */
+/* $Id: vs1001k.c 11 2005-06-15 16:29:51Z wojtekka $ */
 
 /*
- *  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -17,7 +17,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <avr/delay.h>
+#include <util/delay.h>
 #include <avr/io.h>
 #include "mmc.h"
 #include "spi.h"

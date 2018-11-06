@@ -1,12 +1,12 @@
-MCU = at90s2313
+MCU = attiny2313
 NAME = player
 OBJS = debug.o spi.o mmc.o player.o vs1001k.o
 PROG = stk200
 SUDO = 
 
-CFLAGS = -Wall -Os -mmcu=$(MCU) -Wstrict-prototypes -DDEBUG
+CFLAGS = -Wall -Os -mmcu=$(MCU) -Wstrict-prototypes -DF_CPU=6000000L
 
-default:	$(NAME).bin $(NAME).hex $(NAME).hex $(NAME).lst $(NAME)-remove
+default:	$(NAME).bin $(NAME).hex $(NAME).lst $(NAME)-remove
 
 $(NAME).bin:	$(NAME)
 	avr-objcopy -j .text -j .data -O binary $(NAME) $(NAME).bin

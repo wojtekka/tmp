@@ -1,7 +1,7 @@
-/* $Id$ */
+/* $Id: mmc.c 15 2006-09-17 09:46:58Z wojtekka $ */
 
 /*
- *  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -38,9 +38,10 @@ uint32_t mmc_addr;
  */
 static uint8_t mmc_response(void)
 {
-	uint8_t i, j;
+	uint16_t i;
+	uint8_t j;
 
-	for (i = 255; i; i--) {
+	for (i = 4096; i; i--) {
 		j = mmc_read();
 
 		if (j != 0xff)
@@ -74,11 +75,11 @@ static void mmc_write_command(uint8_t command)
  */
 void mmc_init(void)
 {
-	uint8_t i;
+	uint16_t i;
 
 	mmc_cs_set();
 
-	for (i = 10; i; i--)
+	for (i = 600; i; i--)
 		mmc_write_0xff();
 
 	mmc_cs_clear();
@@ -88,7 +89,7 @@ void mmc_init(void)
 	if (mmc_response() != 0x01)
 		player_error(0);
 
-	for (i = 255; i; i--) {
+	for (i = 4096; i; i--) {
 		mmc_cs_set();
 		mmc_write_0xff();
 		mmc_cs_clear();

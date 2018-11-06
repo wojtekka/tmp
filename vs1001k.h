@@ -1,7 +1,7 @@
-/* $Id$ */
+/* $Id: vs1001k.h 11 2005-06-15 16:29:51Z wojtekka $ */
 
 /*
- *  (C) Copyright 2003-2005 Wojtek Kaniewski <wojtekka@irc.pl>
+ *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License Version 2 as
@@ -74,6 +74,6 @@ extern void vs_volume_set(uint8_t volume);
 #define vs_volume_mute() vs_volume_set(254)
 extern void vs_reset(void);
 extern void vs_init(void);
-extern void vs_dreq_wait(void);
+//extern void vs_dreq_wait(void);
 
 #endif /* __VS1001K_H */
