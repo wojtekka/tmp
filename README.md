@@ -22,8 +22,7 @@ The name is a pun. `/tmp` is (or was) a temporary directory on Unix systems.
 The device I built did not last long. The English word `tiny` and Polish
 word `tani` (meaning `cheap`) sound similar.
 
-There's a [website](http://toxygen.net/tmp/) in Polish with more design
-details.
+More design details available on [project website](http://toxygen.net/tmp/).
 
 License
 -------
